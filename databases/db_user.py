@@ -24,5 +24,7 @@ async def create_user(request: UserBase):
 async def get_user(id: int) -> Optional[DbUser]:
     with Session(engine) as session:
         result = session.exec(select(DbUser).where(DbUser.id == id))
-        user = result.one()
+        user = result.first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
         return user
