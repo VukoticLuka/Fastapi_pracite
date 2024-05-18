@@ -10,4 +10,4 @@ router = APIRouter(
 
 @router.post('/new', response_model=UserDisplay)
 async def create_user(request: UserBase):
-    return db_user.create_user(request)
+    return await db_user.create_user(request)
