@@ -1,4 +1,6 @@
-from sqlmodel import Session
+from typing import Optional
+
+from sqlmodel import Session, select
 
 from databases.database import engine
 from databases.models import DbUser
@@ -15,4 +17,12 @@ async def create_user(request: UserBase):
         session.add(user)
         session.commit()
         session.refresh(user)
+        return user
+
+
+async def get_user(id: int) -> Optional[DbUser]:
+    with Session(engine) as session:
+        stmt = select(DbUser).where(DbUser.id == id)
+        result = session.exec(stmt)
+        user = result.one()
         return user
