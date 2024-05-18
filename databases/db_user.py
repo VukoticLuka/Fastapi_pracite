@@ -28,3 +28,8 @@ async def get_user(id: int) -> Optional[DbUser]:
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
         return user
+
+
+async def get_all_users():
+    with Session(engine) as session:
+        return session.exec(select(DbUser)).all()
