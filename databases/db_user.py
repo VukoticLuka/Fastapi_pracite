@@ -1,5 +1,6 @@
 from typing import Optional
 
+from fastapi import HTTPException
 from sqlmodel import Session, select
 
 from databases.database import engine
@@ -22,7 +23,6 @@ async def create_user(request: UserBase):
 
 async def get_user(id: int) -> Optional[DbUser]:
     with Session(engine) as session:
-        stmt = select(DbUser).where(DbUser.id == id)
-        result = session.exec(stmt)
+        result = session.exec(select(DbUser).where(DbUser.id == id))
         user = result.one()
         return user
