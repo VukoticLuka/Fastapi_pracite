@@ -23,3 +23,8 @@ async def get_all_users():
 @router.get('/{id}', response_model=UserDisplay)
 async def get_user(id: int):
     return await db_user.get_user(id)
+
+
+@router.put('/update/{id}')
+async def update_user(id: int, request: UserBase):
+    return db_user.update_user(id, request)

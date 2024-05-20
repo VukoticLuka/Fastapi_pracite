@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi import HTTPException
-from sqlmodel import Session, select
+from sqlmodel import Session, select, update
 
 from databases.database import engine
 from databases.models import DbUser
@@ -33,3 +33,17 @@ async def get_user(id: int) -> Optional[DbUser]:
 async def get_all_users():
     with Session(engine) as session:
         return session.exec(select(DbUser)).all()
+
+
+def update_user(id: int, request: UserBase):
+    with Session(engine) as session:
+        user = session.query(DbUser).filter(DbUser.id == id)
+        if not user.first():
+            raise HTTPException(status_code=404, detail="User not found")
+        user.update({
+            DbUser.username: request.username,
+            DbUser.email: request.email,
+            DbUser.password: request.password
+        })
+        session.commit()
+        return {'msg': 'Ok'}
