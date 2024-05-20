@@ -1,4 +1,4 @@
-from sqlmodel import SQLModel,Field
+from sqlmodel import SQLModel, Field
 
 
 class DbUser(SQLModel, table=True):
@@ -6,4 +6,3 @@ class DbUser(SQLModel, table=True):
     username: str = Field(index=True)
     email: str | None = None
     password: str
-
